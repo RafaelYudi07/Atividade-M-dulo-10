@@ -20,40 +20,35 @@ const CriarTarefa = ({handleClose, tarefas, setTarefas}) =>{
   const [statusTarefa, setStatusTarefa] = useState('');
   
   useEffect(() => {
-    //Abaixo uma variável é declarada para armazenar o id da tarefa, somando 1 ao maior id existente atualmente no state Tarefas
-    let proximoId = Math.max(...tarefas.map(tarefa => tarefa.idTarefa)) + 1;
-    setIdTarefa(proximoId);
-  },[]);
-
-  const handleRecurso = (event) => {
-    setRecursoTarefa(event.target.value);
-  };
-
-  const handleStatus = (event) => {
-    setStatusTarefa(event.target.value);
-  };
-
+    if (tarefas.length > 0) {
+      const proximoId = Math.max(...tarefas.map(tarefa => tarefa.idTarefa)) + 1;
+      setIdTarefa(proximoId);
+    } else {
+      setIdTarefa(1); // Se não houver tarefas, comece com ID 1
+    }
+  }, [tarefas]);
+  
   const handleSalvar = () => {
-    //Para inspecionarmos nosso código, uma boa estratégia é utilizarmos o console.log.
-    //  Com o console.log, podemos visualizar o seu conteúdo na aba Console, no inspecionador de elementos, na janela do navegador
-    console.log(`id: ${idTarefa} \n titulo: ${tituloTarefa} \n descrição: ${descricaoTarefa} \n inicio: ${inicioTarefa} \n fim: ${fimTarefa} \n recurso: ${recursoTarefa} \n status: ${statusTarefa}`);
-
-    setTarefas(
-      [...tarefas, 
-        {
-          idTarefa,
-          tituloTarefa,
-          descricaoTarefa,
-          inicioTarefa,
-          fimTarefa,
-          recursoTarefa,
-          statusTarefa
-        }
-      ]);
-    //console.log(`Tarefas: ` + JSON.stringify(tarefas));
+    if (!tituloTarefa || !descricaoTarefa || !inicioTarefa || !fimTarefa || !recursoTarefa || !statusTarefa) {
+      alert("Todos os campos devem ser preenchidos!");
+      return;
+    }
+    
+    setTarefas([
+      ...tarefas, 
+      {
+        idTarefa,
+        tituloTarefa,
+        descricaoTarefa,
+        inicioTarefa,
+        fimTarefa,
+        recursoTarefa,
+        statusTarefa,
+      },
+    ]);
     handleClose();
   };
-
+    
   return(
     <Grid container spacing={2}>
       <Card sx={style}>
